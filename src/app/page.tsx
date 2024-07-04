@@ -5,6 +5,8 @@ import axios, { AxiosError } from "axios";
 import { useInView } from "react-intersection-observer";
 import Swal from "sweetalert2";
 import PokemonList from "./_components/PokemonList";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const ITEMS_PER_PAGE = 24;
 export default function Home(): React.ReactElement {
@@ -14,32 +16,17 @@ export default function Home(): React.ReactElement {
     hasNextPage,
     isFetchingNextPage,
     isPending,
-    error,
+    // error,
   } = useInfiniteQuery({
     queryKey: ["pokemons"],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }): Promise<Pokemons[]> => {
-      try {
-        const { data } = await axios.get<Pokemons[]>("/api/pokemons", {
-          params: { _page: pageParam, _limit: ITEMS_PER_PAGE },
-        });
-        return data;
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          console.error(
-            "전체 데이터 수신하는데에 있어서 오류 발생",
-            error.message
-          );
-          throw new Error("Axios오류 발생함");
-        } else {
-          console.error(
-            "전체 데이터 받아오는 과정중 예상치 못한 오류 발생",
-            error
-          );
-          throw new Error("예상치못한 오류 발생");
-        }
-      }
+      const { data } = await axios.get<Pokemons[]>("/api/pokemons", {
+        params: { _page: pageParam, _limit: ITEMS_PER_PAGE },
+      });
+      return data;
     },
+    throwOnError: true,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage?.length === ITEMS_PER_PAGE
         ? allPages.length + 1
@@ -56,6 +43,15 @@ export default function Home(): React.ReactElement {
       }
     },
   });
+
+  useEffect(() => {
+    if (isFetchingNextPage) {
+      toast.info("더 많은 포켓몬을 로드 중입니다...", {
+        position: "bottom-right",
+      });
+    }
+  }, [isFetchingNextPage]);
+
   if (isPending) {
     Swal.fire<LoadingAlert>({
       title: "로딩 중...",
@@ -69,15 +65,15 @@ export default function Home(): React.ReactElement {
     Swal.close();
   }
 
-  if (error) {
-    Swal.fire<ErrorAlert>({
-      icon: "error",
-      title: "에러 발생!",
-      text: "데이터를 불러오는 중에 문제가 발생했습니다.",
-      confirmButtonText: "재시도",
-      allowOutsideClick: false,
-    });
-  }
+  // if (error) {
+  //   Swal.fire<ErrorAlert>({
+  //     icon: "error",
+  //     title: "에러 발생!",
+  //     text: "데이터를 불러오는 중에 문제가 발생했습니다.",
+  //     confirmButtonText: "재시도",
+  //     allowOutsideClick: false,
+  //   });
+  // }
 
   return (
     <>
@@ -93,7 +89,6 @@ export default function Home(): React.ReactElement {
           );
         })}
       </ul>
-      {isFetchingNextPage ? "" : ""}
     </>
   );
 }

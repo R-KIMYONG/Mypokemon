@@ -5,7 +5,8 @@ import QueryProvider from "./provider";
 import Link from "next/link";
 import Image from "next/image";
 import { PropsWithChildren } from "react";
-
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={inter.className}>
+        <ToastContainer autoClose={500} stacked className="mb-20"/>
         <header className="bg-amber-300 shadow-md">
           <div className="flex items-center justify-between w-[60%] mx-auto py-2">
             <Link href="/" className="block min-w-20">
