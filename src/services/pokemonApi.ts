@@ -1,9 +1,9 @@
 import { Pokemons } from "@/types/pokemon.type";
 import axios, { AxiosError } from "axios";
-
+const LOCAL_POKEMON_API_URL = process.env.NEXT_PUBLIC_LOCAL_POKEMON_API_URL;
 export const getPokemonsData = async (): Promise<Pokemons[]> => {
   try {
-    const { data } = await axios.get<Pokemons[]>("/api/pokemons");
+    const { data } = await axios.get<Pokemons[]>(`${LOCAL_POKEMON_API_URL}`);
     return data;
   } catch (error) {
     if (error instanceof AxiosError) {

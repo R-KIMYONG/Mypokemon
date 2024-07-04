@@ -7,7 +7,8 @@ import {
   PokemonSpeciesAPIResponse,
   PokemonTypeURLResponse,
 } from "@/types/pokemon.type";
-
+const POKEAPI_POKEMON_URL = process.env.NEXT_PUBLIC_POKEAPI_POKEMON_URL;
+const POKEAPI_SPECIES_URL = process.env.NEXT_PUBLIC_POKEAPI_SPECIES_URL;
 export const GET = async (
   request: Request,
   { params }: { params: { id: string } }
@@ -16,10 +17,8 @@ export const GET = async (
 
   try {
     const [response, speciesResponse] = await Promise.all([
-      axios.get<PokemonAPIResponse>(`https://pokeapi.co/api/v2/pokemon/${id}`),
-      axios.get<PokemonSpeciesAPIResponse>(
-        `https://pokeapi.co/api/v2/pokemon-species/${id}`
-      ),
+      axios.get<PokemonAPIResponse>(`${POKEAPI_POKEMON_URL}/${id}`),
+      axios.get<PokemonSpeciesAPIResponse>(`${POKEAPI_SPECIES_URL}/${id}`),
     ]);
 
     const koreanName = speciesResponse.data.names?.find(

@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import PokemonList from "./_components/PokemonList";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-
+const LOCAL_POKEMON_API_URL = process.env.NEXT_PUBLIC_LOCAL_POKEMON_API_URL;
 const ITEMS_PER_PAGE = 24;
 export default function Home(): React.ReactElement {
   const {
@@ -21,7 +21,7 @@ export default function Home(): React.ReactElement {
     queryKey: ["pokemons"],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }): Promise<Pokemons[]> => {
-      const { data } = await axios.get<Pokemons[]>("/api/pokemons", {
+      const { data } = await axios.get<Pokemons[]>(`${LOCAL_POKEMON_API_URL}`, {
         params: { _page: pageParam, _limit: ITEMS_PER_PAGE },
       });
       return data;

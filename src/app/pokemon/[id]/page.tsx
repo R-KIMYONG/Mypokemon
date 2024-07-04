@@ -5,7 +5,7 @@ import axios, { AxiosError } from "axios";
 import Backbutton from "@/components/Backbutton";
 import { Metadata } from "next";
 import { getPokemonDetailData } from "@/services/pokemonDetailApi";
-
+const LOCAL_POKEMON_API_URL = process.env.NEXT_PUBLIC_LOCAL_POKEMON_API_URL;
 const randomColorClasses: string[] = [
   "bg-red-700",
   "bg-green-700",
@@ -90,7 +90,7 @@ const PokemonDetailPage = async ({
           </div>
         </div>
       </div>
-      <div className="flex items-start gap-4 mx-auto w-2/3 mt-10 justify-around">
+      <div className="flex items-start gap-4 mx-auto w-2/3 mt-10 justify-around mb-10">
         <p className="font-bold w-[50px]">기술:</p>
         <ul className="flex flex-wrap justify-start gap-2 w-11/12">
           {data.moves.map((item, index) => (
@@ -117,7 +117,7 @@ export async function generateMetadata({
   try {
     const { id } = params;
     const { data } = await axios.get<PokemonDetailType>(
-      `http://localhost:3000/api/pokemons/${id}`
+      `${LOCAL_POKEMON_API_URL}/${id}`
     );
     return {
       title: data.korean_name,

@@ -4,8 +4,9 @@ import {
   PokemonAPIResponse,
   PokemonSpeciesAPIResponse,
 } from "@/types/pokemon.type";
-
-const TOTAL_POKEMON = 200;
+const POKEAPI_POKEMON_URL = process.env.NEXT_PUBLIC_POKEAPI_POKEMON_URL;
+const POKEAPI_SPECIES_URL = process.env.NEXT_PUBLIC_POKEAPI_SPECIES_URL;
+const TOTAL_POKEMON = 1000;
 
 export const GET = async (request: Request) => {
   try {
@@ -19,11 +20,9 @@ export const GET = async (request: Request) => {
       const id = offset + index + 1;
       return id <= TOTAL_POKEMON
         ? Promise.all([
-            axios.get<PokemonAPIResponse>(
-              `https://pokeapi.co/api/v2/pokemon/${id}`
-            ), // 포켓몬의 한글 이름을 제외한 나머지 정보를 가져오는 API다.
+            axios.get<PokemonAPIResponse>(`${POKEAPI_POKEMON_URL}/${id}`), // 포켓몬의 한글 이름을 제외한 나머지 정보를 가져오는 API다.
             axios.get<PokemonSpeciesAPIResponse>(
-              `https://pokeapi.co/api/v2/pokemon-species/${id}`
+              `${POKEAPI_SPECIES_URL}/${id}`
             ), // 포켓몬의 한글 이름을 가져오는 API다.
           ])
         : null;
