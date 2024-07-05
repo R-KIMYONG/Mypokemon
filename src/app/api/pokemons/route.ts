@@ -18,28 +18,25 @@ export const GET = async (request: Request) => {
     //----------------------------------------------------------------
     const allPokemonPromises = Array.from({ length: limit }, (_, index) => {
       const id = offset + index + 1;
-      return id <= TOTAL_POKEMON
-        ? Promise.all([
-            axios.get<PokemonAPIResponse>(`${POKEAPI_POKEMON_URL}/${id}`), // 포켓몬의 한글 이름을 제외한 나머지 정보를 가져오는 API다.
-            axios.get<PokemonSpeciesAPIResponse>(
-              `${POKEAPI_SPECIES_URL}/${id}`
-            ), // 포켓몬의 한글 이름을 가져오는 API다.
-          ])
-        : null;
-    }).filter(Boolean);
+      if (id <= TOTAL_POKEMON) {
+        return Promise.all([
+          axios.get<PokemonAPIResponse>(`${POKEAPI_POKEMON_URL}/${id}`), // 포켓몬의 한글 이름을 제외한 나머지 정보를 가져오는 API다.
+          axios.get<PokemonSpeciesAPIResponse>(`${POKEAPI_SPECIES_URL}/${id}`), // 포켓몬의 한글 이름을 가져오는 API다.
+        ]);
+      }
+      return null;
+    }).filter((promise) => promise !== null);
 
-    const validPokemonPromises = allPokemonPromises.filter(
-      (
-        promise
-      ): promise is Promise<
-        [
-          AxiosResponse<PokemonAPIResponse>,
-          AxiosResponse<PokemonSpeciesAPIResponse>
-        ]
-      > => promise !== null
+    const allPokemonResponses = await Promise.all(
+      allPokemonPromises as Array<
+        Promise<
+          [
+            AxiosResponse<PokemonAPIResponse>,
+            AxiosResponse<PokemonSpeciesAPIResponse>
+          ]
+        >
+      >
     );
-
-    const allPokemonResponses = await Promise.all(validPokemonPromises);
 
     const allPokemonData = allPokemonResponses
       .filter(Boolean)
@@ -47,13 +44,16 @@ export const GET = async (request: Request) => {
         const koreanName = speciesResponse.data.names.find(
           (name) => name.language.name === "ko"
         );
+        const sprite = response.data.sprites.other.dream_world.front_default;
+        const official_artwork =
+          response.data.sprites.other["official-artwork"].front_default;
         const pokemonData = {
           id: response.data.id,
           weight: response.data.weight,
           height: response.data.height,
           types: response.data.types,
           korean_name: koreanName?.name || null,
-          sprites: response.data.sprites.other.dream_world.front_default,
+          sprites: sprite ? sprite : official_artwork,
         };
         return pokemonData;
       });

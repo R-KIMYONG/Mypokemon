@@ -266,7 +266,7 @@ export type PokemonAPIResponse = {
   weight: number;
   height: number;
   types: { type: { name: string; url: string } }[];
-  sprites: { other: { dream_world: { front_default: string } } };
+  sprites: PokemonSprites
   abilities: { ability: { name: string; url: string } }[];
   moves: { move: { name: string; url: string } }[];
   korean_name: string;

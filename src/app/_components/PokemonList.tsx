@@ -13,8 +13,8 @@ const PokemonList = forwardRef<HTMLLIElement, { pokemon: Pokemons }>(
         <Link href={`/pokemon/${pokemon.id}`}>
           <div className="w-max mx-auto mb-4">
             <Image
-              src={pokemon.sprites}
-              alt="pokemon img"
+              src={pokemon.sprites ? pokemon.sprites : "/images/noImg.png"}
+              alt="pokemon-img"
               width={80}
               height={80}
               className="w-16 h-16"

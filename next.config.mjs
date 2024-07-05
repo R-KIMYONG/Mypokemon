@@ -5,9 +5,11 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'raw.githubusercontent.com',
-                pathname: '/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/{id}.svg'
+                pathname: '/**'
             }
         ]
     }
 };
 export default nextConfig;
+
+//PokeAPI/sprites/master/sprites/pokemon/other/dream-world/{id}.svg
