@@ -45,7 +45,7 @@
 
 ## ⚙️ 채택한 개발 기술
 
-- **Front-end**: React, tailwind css,React-modal, React-toastify,sweetAlert2
+- **Front-end**: React, tailwind css, React-toastify,sweetAlert2
 - **Back-end**: Next.js
 - **버전 및 이슈 관리**: Github
 - **서비스 배포 환경**: Vercel
