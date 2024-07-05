@@ -47,7 +47,7 @@ const PokemonDetailPage = async ({
       <div className="flex items-center justify-center gap-20 h-[300px]">
         <div className="w-40">
           <Image
-            src={data.sprites}
+            src={data.sprites ? data.sprites : "/public/images/noImg.png"}
             alt="pokemon img"
             width={100}
             height={100}
