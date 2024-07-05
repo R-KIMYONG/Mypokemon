@@ -64,9 +64,12 @@ export const GET = async (
         return { ...move, move: { ...move.move, korean_name: koreanMoveName } };
       })
     );
+    const sprite = response.data.sprites.other.dream_world.front_default;
+    const official_artwork =
+      response.data.sprites.other["official-artwork"].front_default;
     const pokemonData = {
       // ...response.data,
-      sprites: response.data.sprites.other.dream_world.front_default,
+      sprites: sprite ? sprite : official_artwork,
       korean_name: koreanName?.name || response.data.name,
       types: typesWithKoreanNames,
       abilities: abilitiesWithKoreanNames,
